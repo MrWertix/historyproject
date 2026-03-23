@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Русское просвещение XVII в | Культура и образование</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fef5e8;
+            background-image: radial-gradient(circle at 20% 40%, rgba(200, 170, 120, 0.08) 2%, transparent 2.5%),
+                              radial-gradient(circle at 80% 70%, rgba(150, 110, 70, 0.06) 1.5%, transparent 2%);
+            background-size: 45px 45px, 38px 38px;
+            font-family: 'Inter', sans-serif;
+            color: #2a241a;
+        }
+
+        /* СКРЫТИЕ КОНТЕНТА ДО АВТОРИЗАЦИИ */
+        .content-wrapper {
+            display: none;
+        }
+        body.authorized .content-wrapper {
+            display: block;
+        }
+        body.authorized .auth-overlay {
+            display: none;
+        }
+
+        /* ЭКРАН АВТОРИЗАЦИИ */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1510 0%, #2c2418 50%, #1e1911 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .auth-card {
+            background: rgba(30, 25, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 2px solid rgba(230, 196, 139, 0.6);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+            max-width: 450px;
+            width: 90%;
+            animation: fadeInUp 0.8s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .auth-card h2 {
+            font-size: 2.2rem;
+            color: #eedfbb;
+            border: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        .auth-card p {
+            color: #cfbc92;
+            margin-bottom: 1.8rem;
+            font-size: 0.95rem;
+        }
+        .auth-input-group input {
+            background: rgba(255,254,245,0.98);
+            border: 2px solid #c6aa7a;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .auth-input-group input:focus {
+            outline: none;
+            border-color: #e6c48b;
+            box-shadow: 0 0 15px rgba(230,196,139,0.4);
+        }
+        .auth-btn {
+            background: linear-gradient(135deg, #b87c4f, #8b5a3a);
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #d99e6a, #b87c4f);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #e2d2b6; }
+        ::-webkit-scrollbar-thumb { background: #b87c4f; border-radius: 10px; }
+
+        h1, h2, h3, .nav-links a {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #2c2416;
+            border-left: 4px solid #b87c4f;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* ID панель */
+        .id-panel {
+            position: fixed;
+            top: 80px;
+            right: 15px;
+            background: rgba(44, 36, 24, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid #e6c48b;
+            z-index: 1000;
+            font-size: 0.85rem;
+        }
+        .user-greeting {
+            color: #f3e3c2;
+            text-align: center;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 26, 20, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 999;
+            border-bottom: 1px solid rgba(210, 180, 120, 0.5);
+            padding: 0.8rem 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #eedfbb;
+        }
+        .logo span {
+            font-size: 0.6rem;
+            display: block;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #f3e7d3;
+            font-size: 0.9rem;
+        }
+
+        .hero {
+            min-height: 70vh;
+            background: linear-gradient(115deg, rgba(28, 24, 18, 0.75), rgba(38, 32, 24, 0.8)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Spasskaya_tower_%28Moscow%29.jpg/1280px-Spasskaya_tower_%28Moscow%29.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: 65px;
+            padding: 2rem 1rem;
+        }
+        .hero-title {
+            font-size: 2rem;
+            color: #fff5e3;
+            text-shadow: 2px 2px 6px #1e1a10;
+        }
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #f5e7ce;
+            margin-top: 0.8rem;
+        }
+
+        .content-card {
+            background: #fffcf4;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e6d5b5;
+        }
+        .content-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .info-block {
+            background: #fef9ef;
+            padding: 1.2rem;
+            border-radius: 20px;
+            border-left: 4px solid #b87c4f;
+        }
+        .info-block i {
+            font-size: 1.8rem;
+            color: #b87c4f;
+            margin-bottom: 0.5rem;
+        }
+        .info-block h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .info-block p {
+            font-size: 0.9rem;
+        }
+
+        .quiz-container {
+            background: #fff8ed;
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .question {
+            background: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 20px;
+            border: 1px solid #eedfc2;
+        }
+        .question strong {
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #faf3e4;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .option input {
+            width: 16px;
+            height: 16px;
+            accent-color: #b87c4f;
+        }
+        .submit-btn {
+            background: #b87c4f;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .result-area {
+            background: #e8ddca;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .admin-results {
+            background: #2c2418;
+            color: #eedba7;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .result-item {
+            border-bottom: 1px solid #5f4e34;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+        footer {
+            background: #1e1911;
+            color: #cbbd98;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+        }
+
+        /* Планшеты и десктоп */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            .navbar {
+                padding: 0 2rem;
+            }
+            .logo {
+                font-size: 1.6rem;
+            }
+            .nav-links a {
+                font-size: 1rem;
+            }
+            .id-panel {
+                top: 100px;
+                right: 25px;
+                padding: 1rem 1.5rem;
+            }
+            .submit-btn {
+                width: auto;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+        <i class="fas fa-scroll" style="font-size: 2.8rem; color: #e6c48b; margin-bottom: 0.8rem;"></i>
+        <h2>Вход в академию</h2>
+        <p>Введите ваш ID для доступа к материалам</p>
+        <div class="auth-input-group">
+            <input type="text" id="authIdInput" placeholder="Введите ID" autocomplete="off">
+        </div>
+        <button class="auth-btn" id="authEnterBtn"><i class="fas fa-key"></i> Войти</button>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <header>
+        <div class="navbar">
+            <div class="logo">СВЕТ РАЗУМА <span>Русское просвещение · XVII век</span></div>
+            <ul class="nav-links">
+                <li><a href="#main">Главная</a></li>
+                <li><a href="#education">Образование</a></li>
+                <li><a href="#quiz">Проверь себя</a></li>
+                <li><a href="#admin" id="adminLink" style="display:none;">Панель</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="id-panel">
+        <div class="user-greeting" id="greetingText">
+            <i class="fas fa-user-circle"></i> Загрузка...
+        </div>
+    </div>
+
+    <main>
+        <div class="hero" id="main">
+            <div class="container" style="width:100%">
+                <h1 class="hero-title">Образование и культура России XVII века</h1>
+                <p class="hero-subtitle" id="heroPersonalText">От печатной азбуки до Славяно-греко-латинской академии — рождение светского просвещения</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <section id="education">
+                <h2><i class="fas fa-scroll"></i> Просвещение и образование в XVII столетии</h2>
+                
+                <div class="content-card">
+                    <p>В XVII столетии российская культура постепенно обретает светские черты. Знания начинают восприниматься как самостоятельная ценность, меняется отношение к образованию. Ранее обучение велось преимущественно по Псалтыри и Часослову — книгам, главной целью которых было приобщение к православной вере. Однако со временем становится очевидной потребность в более практическом образовании.</p>
+                    <p>Важным шагом в распространении просвещения стало появление первых печатных учебников. В 1630-е годы вышла первая печатная азбука, составленная <strong>Василием Бурцовым-Протопоповым</strong>. Это учебное пособие выдержало несколько изданий и стоило всего одну копейку — для сравнения, экземпляр Соборного уложения доходил в цене до пяти рублей.</p>
+                    <p>Позднее появился иллюстрированный букварь <strong>Кариона Истомина</strong>, который сначала вышел в рукописном варианте, а затем был напечатан. Также в Москве издали знаменитую <strong>«Грамматику» Мелетия Смотрицкого</strong> — фундаментальный труд, по которому учились грамоте несколько поколений русских людей.</p>
+                    <p>Среди книг, получивших широкую известность, особое место занимает <strong>«Синопсис» архимандрита Киево-Печерской лавры Иннокентия Гизеля</strong>. Это первое печатное повествование по отечественной истории, которое на долгие годы стало для россиян главным источником знаний о прошлом своей страны.</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="info-block">
+                        <i class="fas fa-book"></i>
+                        <h3>Первые печатные учебники</h3>
+                        <p>Азбука Василия Бурцова (1 копейка), букварь Кариона Истомина, «Грамматика» Мелетия Смотрицкого, «Синопсис» Иннокентия Гизеля.</p>
+                    </div>
+                    <div class="info-block">
+                        <i class="fas fa-chalkboard-user"></i>
+                        <h3>Училища и школы</h3>
+                        <p>При Андреевском монастыре, Заиконоспасском монастыре, при Печатном дворе (до 200 учеников).</p>
+                    </div>
+                    <div class="info-block">
+                        <i class="fas fa-hospital-user"></i>
+                        <h3>Лекарская школа (1654)</h3>
+                        <p>Первое учебное заведение для подготовки русских лекарей. Изучали хирургию, терапию, анатомию.</p>
+                    </div>
+                    <div class="info-block">
+                        <i class="fas fa-language"></i>
+                        <h3>Школа при Посольском приказе</h3>
+                        <p>Готовила переводчиков, обучала латыни и древнегреческому.</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <i class="fas fa-landmark" style="font-size: 1.8rem; color: #b87c4f;"></i>
+                    <h3 style="margin: 0.5rem 0;">Славяно-греко-латинская академия (1687)</h3>
+                    <p>Первое высшее учебное заведение в России. Открыта для людей «всякого чина, сана и возраста». Возглавляли академию <strong>братья Иоанникий и Софроний Лихуды</strong> — греческие учёные, прибывшие в Москву в 1685 году. В 2007 году в Москве установлен памятник братьям Лихудам.</p>
+                    <p><strong>Значение:</strong> Славяно-греко-латинская академия, Лекарская школа, школа при Посольском приказе стали первыми звеньями системы образования, которая привела к созданию Московского университета и Академии наук.</p>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h2><i class="fas fa-question-circle"></i> Проверьте свои знания</h2>
+                <div class="quiz-container">
+                    <div id="questionsArea"></div>
+                    <button class="submit-btn" id="submitQuiz"><i class="fas fa-pen-fancy"></i> Отправить ответы</button>
+                    <div id="quizResult" class="result-area" style="display:none;"></div>
+                </div>
+            </section>
+
+            <section id="admin" style="display:none;">
+                <h2><i class="fas fa-chart-simple"></i> Результаты учеников</h2>
+                <div id="adminResults" class="admin-results">
+                    <p>Загрузка...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>Проект по истории культуры России XVII века · Просвещение и образование</p>
+    </footer>
+</div>
+
+<script>
+    const questions = [
+        { text: "Как называлась первая печатная азбука, появившаяся в 1630-е годы?", options: ["Азбука Кариона Истомина", "Грамматика Смотрицкого", "Азбука Василия Бурцова-Протопопова", "Псалтырь"], correct: 2 },
+        { text: "Сколько стоила азбука Бурцова?", options: ["5 рублей", "1 копейка", "10 копеек", "50 копеек"], correct: 1 },
+        { text: "Какое учебное заведение считается первым в России для подготовки медиков?", options: ["Школа при Посольском приказе", "Славяно-греко-латинская академия", "Лекарская школа (1654)", "Школа при Андреевском монастыре"], correct: 2 },
+        { text: "Кто возглавлял Славяно-греко-латинскую академию в первые годы?", options: ["Василий Бурцов", "Карион Истомин", "Братья Лихуды", "Иннокентий Гизель"], correct: 2 },
+        { text: "В каком году основана Славяно-греко-латинская академия?", options: ["1654", "1687", "1632", "1701"], correct: 1 },
+        { text: "Какое издание стало первым печатным повествованием по отечественной истории?", options: ["Грамматика Смотрицкого", "Синопсис Гизеля", "Часослов", "Букварь Истомина"], correct: 1 },
+        { text: "Какая школа готовила переводчиков?", options: ["При Печатном дворе", "При Андреевском монастыре", "При Посольском приказе", "Лекарская школа"], correct: 2 },
+        { text: "Кто написал иллюстрированный букварь?", options: ["Василий Бурцов", "Карион Истомин", "Мелетий Смотрицкий", "Иннокентий Гизель"], correct: 1 },
+        { text: "Какие языки преподавали в школе при Андреевском монастыре?", options: ["Немецкий и французский", "Греческий и латинский", "Английский и шведский", "Только церковнославянский"], correct: 1 },
+        { text: "Почему братьям Лихудам установлен памятник?", options: ["За изобретение книгопечатания", "За создание азбуки", "За руководство академией и вклад в просвещение", "За медицинские открытия"], correct: 2 }
+    ];
+
+    let currentUser = { id: "", name: "", isAdmin: false };
+
+    function renderQuiz() {
+        let html = '';
+        questions.forEach((q, idx) => {
+            html += `<div class="question">
+                        <strong>${idx+1}. ${q.text}</strong>
+                        <div class="options">`;
+            q.options.forEach((opt, optIdx) => {
+                html += `<label class="option">
+                            <input type="radio" name="q${idx}" value="${optIdx}"> ${opt}
+                         </label>`;
+            });
+            html += `</div></div>`;
+        });
+        document.getElementById('questionsArea').innerHTML = html;
+    }
+
+    async function saveResult(userId, userName, score, total, answers) {
+        try {
+            const res = await fetch('/api/save-result', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, userName, score, totalQuestions: total, answers })
+            });
+            return await res.json();
+        } catch (err) {
+            return { success: false };
+        }
+    }
+
+    async function loadAdminResults() {
+        try {
+            const res = await fetch('/api/get-results');
+            const results = await res.json();
+            const container = document.getElementById('adminResults');
+            if (!results.length) {
+                container.innerHTML = '<p>Нет результатов</p>';
+                return;
+            }
+            let html = '';
+            results.slice().reverse().forEach(r => {
+                html += `<div class="result-item">
+                            <strong>${r.userName} (${r.userId})</strong> — ${r.score}/${r.totalQuestions} баллов<br>
+                            <small>${r.date}</small>
+                         </div>`;
+            });
+            container.innerHTML = html;
+        } catch (err) {
+            document.getElementById('adminResults').innerHTML = '<p>Ошибка загрузки</p>';
+        }
+    }
+
+    document.getElementById('submitQuiz').addEventListener('click', async () => {
+        if (!currentUser.id) return;
+        
+        let score = 0;
+        const answersRecord = [];
+        for (let i = 0; i < questions.length; i++) {
+            const radios = document.getElementsByName(`q${i}`);
+            let selected = null;
+            for (let j = 0; j < radios.length; j++) {
+                if (radios[j].checked) { selected = parseInt(radios[j].value); break; }
+            }
+            const isCorrect = (selected === questions[i].correct);
+            if (isCorrect) score++;
+            answersRecord.push({
+                question: questions[i].text,
+                selected: selected !== null ? questions[i].options[selected] : "Не выбрано",
+                correct: questions[i].options[questions[i].correct]
+            });
+        }
+        
+        const result = await saveResult(currentUser.id, currentUser.name, score, questions.length, answersRecord);
+        
+        const resultDiv = document.getElementById('quizResult');
+        resultDiv.style.display = 'block';
+        if (result.success) {
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, вы набрали ${score} из ${questions.length} баллов! Уведомление отправлено.`;
+        } else {
+            resultDiv.innerHTML = `${score}/${questions.length} баллов. Ошибка сохранения.`;
+        }
+        
+        if (currentUser.isAdmin) loadAdminResults();
+    });
+
+    function authorizeUser(inputId) {
+        const admins = { "admin001": "Матвей", "admin002": "Светлана Петровна" };
+        
+        if (admins[inputId]) {
+            currentUser = { id: inputId, name: admins[inputId], isAdmin: true };
+        } else {
+            let name = `Ученик ${inputId}`;
+            if (inputId === "001") name = "Матвей";
+            else if (inputId === "002") name = "Анна";
+            else if (inputId === "003") name = "Дмитрий";
+            currentUser = { id: inputId, name: name, isAdmin: false };
+        }
+        
+        let greeting = currentUser.id === "admin002" 
+            ? `<i class="fas fa-user-tie"></i> Здравствуйте, ${currentUser.name}`
+            : `<i class="fas fa-graduation-cap"></i> Привет, ${currentUser.name}`;
+        document.getElementById('greetingText').innerHTML = greeting;
+        
+        const heroText = document.getElementById('heroPersonalText');
+        if (currentUser.id === "admin002") {
+            heroText.innerHTML = `${currentUser.name}, добро пожаловать в историю просвещения!`;
+        } else {
+            heroText.innerHTML = `${currentUser.name}, познакомься с историей просвещения XVII века!`;
+        }
+        
+        if (currentUser.isAdmin) {
+            document.getElementById('adminLink').style.display = 'block';
+            document.getElementById('admin').style.display = 'block';
+            loadAdminResults();
+        }
+        
+        document.body.classList.add('authorized');
+    }
+
+    document.getElementById('authEnterBtn').addEventListener('click', () => {
+        const id = document.getElementById('authIdInput').value.trim();
+        if (id) authorizeUser(id);
+    });
+    
+    document.getElementById('authIdInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('authEnterBtn').click();
+    });
+    
+    renderQuiz();
+</script>
+</body>
+</html>
