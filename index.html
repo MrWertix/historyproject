@@ -14,7 +14,7 @@
             color: #2a241a;
             padding-bottom: 2rem;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 1rem; }
         
         /* АВТОРИЗАЦИЯ */
         .auth-overlay {
@@ -63,10 +63,40 @@
         body.authorized .content-wrapper { display: block; }
         body.authorized .auth-overlay { display: none; }
         
+        /* ТАБЫ */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: #e8ddca;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            color: #2a241a;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: #b87c4f;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
         /* ОСНОВНОЙ КОНТЕНТ */
-        h1, h2 { font-family: 'Cormorant Garamond', serif; color: #2c2416; }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: #2c2416; }
         h1 { font-size: 2rem; text-align: center; margin: 1rem 0; }
         h2 { font-size: 1.6rem; border-left: 4px solid #b87c4f; padding-left: 1rem; margin: 1.5rem 0 1rem; }
+        h3 { font-size: 1.3rem; margin: 1rem 0 0.5rem; }
         
         .hero {
             background: linear-gradient(115deg, rgba(28,24,18,0.8), rgba(38,32,24,0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Spasskaya_tower_%28Moscow%29.jpg/1280px-Spasskaya_tower_%28Moscow%29.jpg');
@@ -158,6 +188,24 @@
             margin-top: 2rem;
             border-radius: 20px;
         }
+        
+        /* Стили для страницы содержания */
+        .project-content {
+            background: #fffcf4;
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        .project-content p {
+            margin-bottom: 1rem;
+        }
+        .project-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #b87c4f;
+        }
+        
         @media (min-width: 768px) {
             h1 { font-size: 2.5rem; }
             h2 { font-size: 1.8rem; }
@@ -183,40 +231,91 @@
             <div class="id-panel" id="greetingText">Загрузка...</div>
         </div>
         
-        <div class="hero">
-            <h1>Русское просвещение XVII века</h1>
-            <p>От печатной азбуки до Славяно-греко-латинской академии</p>
+        <!-- ТАБЫ -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="main">📖 Главная</button>
+            <button class="tab-btn" data-tab="content">📚 Содержание проекта</button>
         </div>
+        
+        <!-- ВКЛАДКА ГЛАВНАЯ -->
+        <div id="tab-main" class="tab-content active">
+            <div class="hero">
+                <h1>Русское просвещение XVII века</h1>
+                <p>От печатной азбуки до Славяно-греко-латинской академии</p>
+            </div>
 
-        <section>
-            <h2>📜 Просвещение и образование</h2>
-            <div class="content-card">
-                <p>В XVII веке российская культура обретает светские черты. В 1630-е вышла первая печатная азбука Василия Бурцова-Протопопова (стоила 1 копейку). Позже появились букварь Кариона Истомина, «Грамматика» Мелетия Смотрицкого и «Синопсис» Иннокентия Гизеля — первое печатное повествование по отечественной истории.</p>
-            </div>
-            <div class="grid-2">
-                <div class="info-block"><i class="fas fa-book"></i><h3>Первые учебники</h3><p>Азбука Бурцова, букварь Истомина, Грамматика Смотрицкого</p></div>
-                <div class="info-block"><i class="fas fa-chalkboard"></i><h3>Школы</h3><p>При Андреевском монастыре, Заиконоспасском, Печатном дворе</p></div>
-                <div class="info-block"><i class="fas fa-hospital-user"></i><h3>Лекарская школа (1654)</h3><p>Первая школа для подготовки русских лекарей</p></div>
-                <div class="info-block"><i class="fas fa-language"></i><h3>Школа при Посольском приказе</h3><p>Готовила переводчиков</p></div>
-            </div>
-            <div class="content-card">
-                <h3>🏛 Славяно-греко-латинская академия (1687)</h3>
-                <p>Первое высшее учебное заведение в России. Возглавляли братья Лихуды. В 2007 году в Москве установлен памятник братьям Лихудам.</p>
-            </div>
-        </section>
+            <section>
+                <h2>📜 Просвещение и образование</h2>
+                <div class="content-card">
+                    <p>В XVII веке российская культура обретает светские черты. В 1630-е вышла первая печатная азбука Василия Бурцова-Протопопова (стоила 1 копейку). Позже появились букварь Кариона Истомина, «Грамматика» Мелетия Смотрицкого и «Синопсис» Иннокентия Гизеля — первое печатное повествование по отечественной истории.</p>
+                </div>
+                <div class="grid-2">
+                    <div class="info-block"><i class="fas fa-book"></i><h3>Первые учебники</h3><p>Азбука Бурцова, букварь Истомина, Грамматика Смотрицкого</p></div>
+                    <div class="info-block"><i class="fas fa-chalkboard"></i><h3>Школы</h3><p>При Андреевском монастыре, Заиконоспасском, Печатном дворе</p></div>
+                    <div class="info-block"><i class="fas fa-hospital-user"></i><h3>Лекарская школа (1654)</h3><p>Первая школа для подготовки русских лекарей</p></div>
+                    <div class="info-block"><i class="fas fa-language"></i><h3>Школа при Посольском приказе</h3><p>Готовила переводчиков</p></div>
+                </div>
+                <div class="content-card">
+                    <h3>🏛 Славяно-греко-латинская академия (1687)</h3>
+                    <p>Первое высшее учебное заведение в России. Возглавляли братья Лихуды. В 2007 году в Москве установлен памятник братьям Лихудам.</p>
+                </div>
+            </section>
 
-        <section>
-            <h2>📝 Проверьте знания</h2>
-            <div class="quiz-container">
-                <div id="questionsArea"></div>
-                <button class="submit-btn" id="submitQuiz"><i class="fas fa-paper-plane"></i> Отправить ответы</button>
-                <div id="quizResult" class="result-area" style="display:none;"></div>
+            <section>
+                <h2>📝 Проверьте знания</h2>
+                <div class="quiz-container">
+                    <div id="questionsArea"></div>
+                    <button class="submit-btn" id="submitQuiz"><i class="fas fa-paper-plane"></i> Отправить ответы</button>
+                    <div id="quizResult" class="result-area" style="display:none;"></div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- ВКЛАДКА СОДЕРЖАНИЕ ПРОЕКТА (ПОЛНЫЙ ТЕКСТ) -->
+        <div id="tab-content" class="tab-content">
+            <div class="project-content">
+                <h1 style="text-align: center; margin-bottom: 0.5rem;">ПРОСВЕЩЕНИЕ И ОБРАЗОВАНИЕ В РОССИИ XVII ВЕКА</h1>
+                <p style="text-align: center; font-size: 1.1rem; color: #b87c4f; margin-bottom: 2rem;">Становление светской культуры и новые подходы к обучению</p>
+                
+                <p>В XVII столетии российская культура постепенно обретает светские черты. Знания начинают восприниматься как самостоятельная ценность, меняется отношение к образованию и тем задачам, которые оно должно было решать. Ранее обучение велось преимущественно по Псалтыри и Часослову — книгам, главной целью которых было приобщение к православной вере, а не передача светских знаний. Однако со временем становится очевидной потребность в более практическом образовании.</p>
+                
+                <p>Важным шагом в распространении просвещения стало появление первых печатных учебников. Спрос на них был очень высоким. В 1630-е годы вышла первая печатная азбука, составленная Василием Бурцовым-Протопоповым. Это учебное пособие выдержало несколько изданий и стоило всего одну копейку — для сравнения, экземпляр Соборного уложения доходил в цене до пяти рублей. Столь низкая цена свидетельствует о том, что азбука была рассчитана на массовое потребление и предназначалась для широких слоёв населения.</p>
+                
+                <p>Позднее появился иллюстрированный букварь Кариона Истомина, который сначала вышел в рукописном варианте, а затем был напечатан. Также в Москве издали знаменитую «Грамматику» Мелетия Смотрицкого — фундаментальный труд, по которому учились грамоте несколько поколений русских людей. Для обучения арифметике создавались разнообразные «цифирные счётные мудрости» — руководства по математике.</p>
+                
+                <p>Среди книг, получивших широкую известность, особое место занимает «Синопсис» архимандрита Киево-Печерской лавры Иннокентия Гизеля. Это первое печатное повествование по отечественной истории, которое на долгие годы стало для россиян одним из главных источников знаний о прошлом своей страны.</p>
+                
+                <h3>Первые школы и училища в Москве</h3>
+                <p>Середина XVII века ознаменовалась созданием новых учебных заведений. При Андреевском монастыре близ Москвы открылось училище, где юношей обучали греческому и латинскому языкам, философии, риторике и другим наукам. Позже была открыта школа при Заиконоспасском монастыре, где преподавали грамматику и латынь.</p>
+                
+                <p>Появилась школа и при Печатном дворе. Её посещало до двухсот человек из разных сословий — это было значительное по тем временам учебное заведение, где обучались выходцы из различных социальных групп.</p>
+                
+                <h3>Славяно-греко-латинская академия</h3>
+                <p>Важнейшим событием в истории русского образования стало основание в 1687 году Славяно-греко-латинской академии. Это было первое высшее учебное заведение в России, открытое для людей «всякого чина, сана и возраста». Академия ставила своей целью широкое образование и готовила кадры как для государственных, так и для церковных учреждений.</p>
+                
+                <p>Руководство академией в первые годы её существования (до 1694 года) осуществляли греческие учёные — братья Иоанникий и Софроний Лихуды, прибывшие в Москву в 1685 году. Их приглашение было не случайным: греческая учёность считалась образцом образованности, а братья Лихуды обладали глубокими познаниями в различных науках. В 2007 году в Москве был установлен памятник братьям Лихудам (скульптор В. Клыков) в знак признания их огромного вклада в развитие русского просвещения.</p>
+                
+                <p>Славяно-греко-латинская академия сыграла выдающуюся роль в развитии образования в России. Здесь учились многие выдающиеся деятели русской культуры, а сама академия стала образцом для последующих учебных заведений.</p>
+                
+                <h3>Специализированные школы</h3>
+                <p>В XVII веке всё более ощущалась потребность в специалистах, знания которых были бы применимы в конкретных сферах, прежде всего на военном и дипломатическом поприще. Для подготовки таких кадров устраивались специальные школы.</p>
+                
+                <p>В 1654 году была основана школа при Аптекарском приказе, которую называли также Лекарской школой. Её задачей была подготовка русских лекарей. Это учебное заведение считается первым в России, где готовили профессиональных медиков. Ученики изучали основы хирургии, терапии, анатомии, учились изготовлению лекарств. Почти все преподаватели были иностранцами. Подавляющее число выпускников школы становились военными врачами-лекарями. К концу XVII века уже стало нормой, что каждый полк имеет своего лекаря — это свидетельствует о высоком качестве подготовки.</p>
+                
+                <p>Школа при Посольском приказе готовила посольских подьячих, переводчиков и толмачей. Одной из главных задач школы было обучение иностранным языкам, включая «мёртвые» — латынь и древнегреческий. Это учебное заведение продолжило свою работу и в начале XVIII века, став важным центром подготовки дипломатических кадров.</p>
+                
+                <h3>Значение просвещения XVII века</h3>
+                <p>XVII век стал переломным периодом в истории русского образования. Именно в это время закладываются основы светской школы, появляются первые учебники, рассчитанные на массового читателя, открываются специализированные учебные заведения и первая академия. Образование перестаёт быть привилегией узкого круга лиц и начинает рассматриваться как важное государственное дело.</p>
+                
+                <p>Распространение грамотности, создание учебной литературы, подготовка специалистов в различных областях — всё это подготовило почву для масштабных образовательных реформ следующего столетия. Опыт, накопленный в XVII веке, позволил Петру I и его преемникам продолжить дело развития просвещения в России.</p>
+                
+                <p>Славяно-греко-латинская академия, Лекарская школа, школа при Посольском приказе стали первыми звеньями той системы образования, которая впоследствии привела к созданию Московского университета, Академии наук и других учебных заведений, составивших славу русского просвещения.</p>
             </div>
-        </section>
+        </div>
 
         <footer>
             <p>Проект по истории России XVII века · Просвещение и образование</p>
-            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты отправленны</p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты отправляются в Telegram</p>
         </footer>
     </div>
 </div>
@@ -249,12 +348,11 @@
     let currentUser = { id: "", name: "" };
 
     // ========== TELEGRAM НАСТРОЙКИ ==========
-    // ВСТАВЬТЕ СВОИ ДАННЫЕ:
-    const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";      // Замените на ваш токен
-    const TELEGRAM_CHAT_ID = "5915959191";      // Замените на ваш chat_id
+    const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";
+    const TELEGRAM_CHAT_ID = "5915959191";
     // =========================================
 
-    // Функция отправки в Telegram (подробный отчет)
+    // Функция отправки в Telegram
     async function sendDetailedToTelegram(userName, userId, answersDetails, score, total) {
         if (TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН" || TELEGRAM_CHAT_ID === "ВАШ_CHAT_ID") {
             console.log("Telegram не настроен");
@@ -263,7 +361,6 @@
         
         const percent = Math.round(score / total * 100);
         
-        // Формируем подробное сообщение
         let detailsText = "";
         for (let i = 0; i < answersDetails.length; i++) {
             const detail = answersDetails[i];
@@ -276,10 +373,7 @@
                         `📊 *Итог:* ${score}/${total} баллов (${percent}%)\n\n` +
                         `📋 *Подробности:*\n${detailsText}`;
         
-        // Telegram имеет ограничение на длину сообщения (4096 символов)
-        // Если сообщение слишком длинное, отправим итог отдельно, а детали отдельно
         if (message.length > 4000) {
-            // Отправляем итог
             const summaryMessage = `📜 *РЕЗУЛЬТАТ ТЕСТА* 📜\n\n👤 ${userName} (${userId})\n📊 Итог: ${score}/${total} (${percent}%)\n\nПодробности слишком длинные, см. следующее сообщение.`;
             await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -290,7 +384,6 @@
                     parse_mode: 'Markdown'
                 })
             });
-            // Отправляем детали частями
             for (let i = 0; i < answersDetails.length; i++) {
                 const detail = answersDetails[i];
                 const mark = detail.isCorrect ? "✅" : "❌";
@@ -326,7 +419,6 @@
         }
     }
 
-    // Отрисовка теста
     function renderQuiz() {
         let html = '';
         questions.forEach((q, idx) => {
@@ -343,14 +435,12 @@
         document.getElementById('questionsArea').innerHTML = html;
     }
 
-    // Отправка теста
     document.getElementById('submitQuiz').addEventListener('click', async () => {
         if (!currentUser.id) {
             alert('Сначала авторизуйтесь');
             return;
         }
         
-        // Собираем ответы и подсчитываем баллы
         let score = 0;
         const answersDetails = [];
         
@@ -380,16 +470,13 @@
         }
         
         const total = questions.length;
-        
-        // Отправка в Telegram
         const sent = await sendDetailedToTelegram(currentUser.name, currentUser.id, answersDetails, score, total);
         
-        // Показ результата
         const resultDiv = document.getElementById('quizResult');
         resultDiv.style.display = 'block';
         
         if (sent) {
-            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены.`;
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены в Telegram.`;
             resultDiv.style.background = "#d4e0c4";
         } else {
             resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов.<br>⚠️ Ошибка отправки в Telegram. Проверьте токен и chat_id.`;
@@ -397,9 +484,7 @@
         }
     });
 
-    // Авторизация
     function authorizeUser(inputId) {
-        // Проверка ID в списке
         if (userMap[inputId]) {
             currentUser = { id: inputId, name: userMap[inputId] };
         } else {
@@ -414,6 +499,22 @@
         document.body.classList.add('authorized');
         return true;
     }
+
+    // Переключение табов
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        });
+    });
 
     document.getElementById('authEnterBtn').addEventListener('click', () => {
         const id = document.getElementById('authIdInput').value.trim();
