@@ -216,7 +216,7 @@
 
         <footer>
             <p>Проект по истории России XVII века · Просвещение и образование</p>
-            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты отправляются в Telegram</p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты отправленны</p>
         </footer>
     </div>
 </div>
@@ -389,7 +389,7 @@
         resultDiv.style.display = 'block';
         
         if (sent) {
-            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены в Telegram.`;
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены.`;
             resultDiv.style.background = "#d4e0c4";
         } else {
             resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов.<br>⚠️ Ошибка отправки в Telegram. Проверьте токен и chat_id.`;
