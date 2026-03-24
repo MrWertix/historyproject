@@ -103,74 +103,27 @@
             border-radius: 24px;
             padding: 1rem;
         }
-        .question-card {
+        .question {
             background: white;
-            padding: 1.5rem;
+            padding: 1rem;
             margin: 1rem 0;
-            border-radius: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            border-radius: 16px;
         }
         .options {
             display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin: 1rem 0;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
         .option {
             background: #f5efdf;
-            padding: 10px 16px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        .option:hover {
-            background: #e9dfc8;
-        }
-        .option.selected {
-            background: #b87c4f;
-            color: white;
-            border-color: #8b5a36;
-        }
-        .feedback {
-            margin: 1rem 0;
-            padding: 12px;
-            border-radius: 16px;
-            background: #f0e7da;
-            font-style: italic;
-        }
-        .feedback.correct {
-            background: #d4e0c4;
-            border-left: 4px solid #4c7a34;
-        }
-        .feedback.wrong {
-            background: #f0d8c4;
-            border-left: 4px solid #c45c34;
-        }
-        .quiz-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-        .nav-btn {
-            background: #b87c4f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+            padding: 6px 14px;
             border-radius: 40px;
             cursor: pointer;
         }
-        .nav-btn:disabled {
-            background: #cbbd98;
-            cursor: not-allowed;
-        }
+        .option input { margin-right: 6px; }
         .submit-btn {
-            background: #2c5f2d;
+            background: #b87c4f;
             color: white;
             border: none;
             padding: 12px 28px;
@@ -204,13 +157,6 @@
             padding: 1.5rem;
             margin-top: 2rem;
             border-radius: 20px;
-        }
-        .progress {
-            background: #e6d5b5;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            margin-bottom: 1rem;
-            text-align: center;
         }
         @media (min-width: 768px) {
             h1 { font-size: 2.5rem; }
@@ -262,13 +208,8 @@
         <section>
             <h2>📝 Проверьте знания</h2>
             <div class="quiz-container">
-                <div class="progress" id="quizProgress">Вопрос 1 из 10</div>
                 <div id="questionsArea"></div>
-                <div class="quiz-nav">
-                    <button class="nav-btn" id="prevBtn" disabled><i class="fas fa-arrow-left"></i> Назад</button>
-                    <button class="nav-btn" id="nextBtn">Далее <i class="fas fa-arrow-right"></i></button>
-                </div>
-                <button class="submit-btn" id="submitQuiz" style="display: none;"><i class="fas fa-paper-plane"></i> Завершить и отправить результаты</button>
+                <button class="submit-btn" id="submitQuiz"><i class="fas fa-paper-plane"></i> Отправить ответы</button>
                 <div id="quizResult" class="result-area" style="display:none;"></div>
             </div>
         </section>
@@ -281,6 +222,16 @@
 </div>
 
 <script>
+    // ========== СПИСОК ID И ИМЕН ==========
+    const userMap = {
+        "043": "Даша", "012": "Артем", "057": "Олеся", "089": "Андрей", "024": "Саша",
+        "076": "Аня", "031": "Софья", "065": "Ярослав", "048": "Катя", "091": "Тимофей",
+        "019": "Егор", "052": "Лиза", "037": "Дима", "084": "Илья", "063": "Ксюша",
+        "073": "Тая", "042": "Матвей", "058": "Арсений", "095": "Сергей", "016": "Маргарита",
+        "088": "Карим", "022": "Маша", "049": "Анжелика", "074": "Полина", "033": "Костя",
+        "067": "Аня", "admin001": "Матвей Марейчев", "000": "Светлана Петровна"
+    };
+
     // ========== ВОПРОСЫ ==========
     const questions = [
         { text: "Первая печатная азбука 1630-х годов?", options: ["Кариона Истомина", "Смотрицкого", "Василия Бурцова-Протопопова", "Псалтырь"], correct: 2 },
@@ -295,47 +246,70 @@
         { text: "Памятник братьям Лихудам установлен за что?", options: ["Книгопечатание", "Азбуку", "Руководство академией", "Медицину"], correct: 2 }
     ];
 
-    // ========== СПИСОК ПОЛЬЗОВАТЕЛЕЙ ==========
-    const usersList = {
-        "043": "Даша", "012": "Артем", "057": "Олеся", "089": "Андрей", "024": "Саша",
-        "076": "Аня", "031": "Софья", "065": "Ярослав", "048": "Катя", "091": "Тимофей",
-        "019": "Егор", "052": "Лиза", "037": "Дима", "084": "Илья", "063": "Ксюша",
-        "073": "Тая", "042": "Матвей", "058": "Арсений", "095": "Сергей", "016": "Маргарита",
-        "088": "Карим", "022": "Маша", "049": "Анжелика", "074": "Полина", "033": "Костя",
-        "067": "Аня", "000": "Светлана Петровна"
-    };
-    
-    // Админы (для особого приветствия)
-    const admins = { "042": "Матвей", "000": "Светлана Петровна" };
-    
-    let currentUser = { id: "", name: "", isAdmin: false };
-    let userAnswers = new Array(questions.length).fill(null); // null - не отвечен, иначе индекс ответа
-    let currentQuestionIndex = 0;
-    let quizCompleted = false;
-    
+    let currentUser = { id: "", name: "" };
+
     // ========== TELEGRAM НАСТРОЙКИ ==========
     // ВСТАВЬТЕ СВОИ ДАННЫЕ:
     const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";      // Замените на ваш токен
     const TELEGRAM_CHAT_ID = "5915959191";      // Замените на ваш chat_id
     // =========================================
-    
-    // Функция отправки в Telegram
-    async function sendToTelegram(userName, userId, messageText, isFinal = false) {
+
+    // Функция отправки в Telegram (подробный отчет)
+    async function sendDetailedToTelegram(userName, userId, answersDetails, score, total) {
         if (TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН" || TELEGRAM_CHAT_ID === "ВАШ_CHAT_ID") {
             console.log("Telegram не настроен");
             return false;
         }
         
-        const prefix = isFinal ? "📊 *ИТОГ ТЕСТИРОВАНИЯ* 📊\n\n" : "📝 *Новый ответ* 📝\n\n";
-        const message = prefix +
-                        `👤 *Пользователь:* ${userName} (${userId})\n` +
-                        `${messageText}\n` +
-                        `🕐 *Время:* ${new Date().toLocaleString('ru-RU')}`;
+        const percent = Math.round(score / total * 100);
         
-        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        // Формируем подробное сообщение
+        let detailsText = "";
+        for (let i = 0; i < answersDetails.length; i++) {
+            const detail = answersDetails[i];
+            const mark = detail.isCorrect ? "✅" : "❌";
+            detailsText += `${i+1}. ${detail.question}\n   📝 Ответил: ${detail.userAnswer}\n   📖 Правильный: ${detail.correctAnswer}\n   ${mark}\n\n`;
+        }
+        
+        const message = `📜 *НОВЫЙ РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
+                        `👤 *Пользователь:* ${userName} (${userId})\n` +
+                        `📊 *Итог:* ${score}/${total} баллов (${percent}%)\n\n` +
+                        `📋 *Подробности:*\n${detailsText}`;
+        
+        // Telegram имеет ограничение на длину сообщения (4096 символов)
+        // Если сообщение слишком длинное, отправим итог отдельно, а детали отдельно
+        if (message.length > 4000) {
+            // Отправляем итог
+            const summaryMessage = `📜 *РЕЗУЛЬТАТ ТЕСТА* 📜\n\n👤 ${userName} (${userId})\n📊 Итог: ${score}/${total} (${percent}%)\n\nПодробности слишком длинные, см. следующее сообщение.`;
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: summaryMessage,
+                    parse_mode: 'Markdown'
+                })
+            });
+            // Отправляем детали частями
+            for (let i = 0; i < answersDetails.length; i++) {
+                const detail = answersDetails[i];
+                const mark = detail.isCorrect ? "✅" : "❌";
+                const detailMsg = `${i+1}. ${detail.question}\n📝 Ответ: ${detail.userAnswer}\n📖 Правильный: ${detail.correctAnswer}\n${mark}`;
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: detailMsg,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            }
+            return true;
+        }
         
         try {
-            const response = await fetch(url, {
+            const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -351,222 +325,96 @@
             return false;
         }
     }
-    
-    // Отправка ответа на конкретный вопрос
-    async function sendAnswerToTelegram(questionIndex, selectedOptionIndex, isCorrect) {
-        const question = questions[questionIndex];
-        const selectedText = question.options[selectedOptionIndex];
-        const correctText = question.options[question.correct];
-        
-        const status = isCorrect ? "✅ *ПРАВИЛЬНО*" : "❌ *НЕПРАВИЛЬНО*";
-        const messageText = `*Вопрос ${questionIndex+1}:* ${question.text}\n\n` +
-                            `📌 *Ответ:* ${selectedText}\n` +
-                            `🎯 *Правильный:* ${correctText}\n` +
-                            `📊 *Результат:* ${status}`;
-        
-        await sendToTelegram(currentUser.name, currentUser.id, messageText, false);
-    }
-    
-    // Отправка итогового результата
-    async function sendFinalResult(score, total) {
-        const percent = Math.round(score / total * 100);
-        let grade = "";
-        if (percent >= 85) grade = "🏆 Отлично!";
-        else if (percent >= 70) grade = "📘 Хорошо!";
-        else if (percent >= 50) grade = "📖 Удовлетворительно";
-        else grade = "📚 Нужно повторить материал";
-        
-        const messageText = `*Результат тестирования:*\n\n` +
-                            `📊 *Баллы:* ${score}/${total}\n` +
-                            `📈 *Процент:* ${percent}%\n` +
-                            `🎓 *Оценка:* ${grade}\n\n` +
-                            `*Детали ответов:*\n${getAnswersDetails()}`;
-        
-        await sendToTelegram(currentUser.name, currentUser.id, messageText, true);
-    }
-    
-    function getAnswersDetails() {
-        let details = "";
-        for (let i = 0; i < questions.length; i++) {
-            const isCorrect = userAnswers[i] === questions[i].correct;
-            const status = userAnswers[i] !== null ? (isCorrect ? "✓" : "✗") : "?";
-            details += `${i+1}. ${status} `;
-            if ((i+1) % 5 === 0) details += "\n";
-        }
-        return details;
-    }
-    
-    // Сохранить ответ
-    function saveAnswer(questionIndex, answerIndex) {
-        if (quizCompleted) return;
-        userAnswers[questionIndex] = answerIndex;
-        renderCurrentQuestion();
-    }
-    
-    // Отрисовка текущего вопроса
-    function renderCurrentQuestion() {
-        if (quizCompleted) return;
-        
-        const q = questions[currentQuestionIndex];
-        const savedAnswer = userAnswers[currentQuestionIndex];
-        
-        let html = `<div class="question-card">
-                        <div class="question-text">${currentQuestionIndex+1}. ${q.text}</div>
+
+    // Отрисовка теста
+    function renderQuiz() {
+        let html = '';
+        questions.forEach((q, idx) => {
+            html += `<div class="question">
+                        <strong>${idx+1}. ${q.text}</strong>
                         <div class="options">`;
-        
-        q.options.forEach((opt, idx) => {
-            const isSelected = (savedAnswer === idx);
-            const selectedClass = isSelected ? 'selected' : '';
-            html += `<div class="option ${selectedClass}" data-opt-index="${idx}">
-                        ${opt}
-                     </div>`;
-        });
-        
-        html += `</div>`;
-        
-        // Показываем фидбек, если на этот вопрос уже отвечали
-        if (savedAnswer !== null) {
-            const isCorrect = (savedAnswer === q.correct);
-            const correctText = q.options[q.correct];
-            const feedbackClass = isCorrect ? 'correct' : 'wrong';
-            const feedbackIcon = isCorrect ? '✅' : '❌';
-            const feedbackText = isCorrect ? 'Верно!' : `Неверно. Правильный ответ: "${correctText}"`;
-            html += `<div class="feedback ${feedbackClass}">
-                        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i> 
-                        ${feedbackText} ${isCorrect ? '🎉' : '📚'}
-                     </div>`;
-        } else {
-            html += `<div class="feedback">
-                        <i class="fas fa-lightbulb"></i> 
-                        Выберите один из вариантов ответа.
-                     </div>`;
-        }
-        
-        html += `</div>`;
-        
-        document.getElementById('questionsArea').innerHTML = html;
-        document.getElementById('quizProgress').innerHTML = `Вопрос ${currentQuestionIndex+1} из ${questions.length}`;
-        
-        // Обновляем состояние кнопок
-        document.getElementById('prevBtn').disabled = (currentQuestionIndex === 0);
-        document.getElementById('nextBtn').disabled = false;
-        
-        // Показываем кнопку завершения только если все вопросы отвечены
-        const allAnswered = userAnswers.every(a => a !== null);
-        const submitBtn = document.getElementById('submitQuiz');
-        if (allAnswered && !quizCompleted) {
-            submitBtn.style.display = 'block';
-        } else {
-            submitBtn.style.display = 'none';
-        }
-        
-        // Добавляем обработчики для опций
-        document.querySelectorAll('.option').forEach(opt => {
-            opt.addEventListener('click', (e) => {
-                if (quizCompleted) return;
-                const optIndex = parseInt(opt.dataset.optIndex);
-                const wasAnswered = (userAnswers[currentQuestionIndex] !== null);
-                
-                // Сохраняем ответ
-                saveAnswer(currentQuestionIndex, optIndex);
-                
-                // Если раньше не было ответа, отправляем в Telegram
-                if (!wasAnswered) {
-                    const isCorrect = (optIndex === q.correct);
-                    sendAnswerToTelegram(currentQuestionIndex, optIndex, isCorrect);
-                }
+            q.options.forEach((opt, optIdx) => {
+                html += `<label class="option">
+                            <input type="radio" name="q${idx}" value="${optIdx}"> ${opt}
+                         </label>`;
             });
+            html += `</div></div>`;
         });
+        document.getElementById('questionsArea').innerHTML = html;
     }
-    
-    // Переключение на следующий вопрос
-    function nextQuestion() {
-        if (currentQuestionIndex < questions.length - 1) {
-            currentQuestionIndex++;
-            renderCurrentQuestion();
-        }
-    }
-    
-    // Переключение на предыдущий вопрос
-    function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-            currentQuestionIndex--;
-            renderCurrentQuestion();
-        }
-    }
-    
-    // Завершение теста
-    async function finishQuiz() {
-        if (quizCompleted) return;
-        
-        // Проверяем, все ли вопросы отвечены
-        const allAnswered = userAnswers.every(a => a !== null);
-        if (!allAnswered) {
-            alert("Ответьте на все вопросы перед завершением!");
+
+    // Отправка теста
+    document.getElementById('submitQuiz').addEventListener('click', async () => {
+        if (!currentUser.id) {
+            alert('Сначала авторизуйтесь');
             return;
         }
         
-        // Подсчет баллов
+        // Собираем ответы и подсчитываем баллы
         let score = 0;
+        const answersDetails = [];
+        
         for (let i = 0; i < questions.length; i++) {
-            if (userAnswers[i] === questions[i].correct) score++;
+            const radios = document.getElementsByName(`q${i}`);
+            let selectedValue = null;
+            let selectedText = "";
+            for (let j = 0; j < radios.length; j++) {
+                if (radios[j].checked) {
+                    selectedValue = parseInt(radios[j].value);
+                    selectedText = questions[i].options[selectedValue];
+                    break;
+                }
+            }
+            
+            const isCorrect = (selectedValue === questions[i].correct);
+            if (isCorrect) score++;
+            
+            const correctAnswerText = questions[i].options[questions[i].correct];
+            
+            answersDetails.push({
+                question: questions[i].text,
+                userAnswer: selectedText || "Не выбран ответ",
+                correctAnswer: correctAnswerText,
+                isCorrect: isCorrect
+            });
         }
         
         const total = questions.length;
         
-        // Отправляем итоговый результат
-        await sendFinalResult(score, total);
+        // Отправка в Telegram
+        const sent = await sendDetailedToTelegram(currentUser.name, currentUser.id, answersDetails, score, total);
         
-        quizCompleted = true;
-        
-        // Показываем результат
+        // Показ результата
         const resultDiv = document.getElementById('quizResult');
         resultDiv.style.display = 'block';
         
-        const percent = Math.round(score / total * 100);
-        resultDiv.innerHTML = `<i class="fas fa-graduation-cap"></i> 
-                               <strong>${currentUser.name}</strong>, вы завершили тестирование!<br>
-                               📊 Результат: ${score} из ${total} баллов (${percent}%)<br>
-                               📱 Результат отправлен в Telegram.`;
-        resultDiv.style.background = "#d4e0c4";
-        
-        // Блокируем кнопки навигации
-        document.getElementById('prevBtn').disabled = true;
-        document.getElementById('nextBtn').disabled = true;
-        document.getElementById('submitQuiz').disabled = true;
-    }
-    
+        if (sent) {
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены в Telegram.`;
+            resultDiv.style.background = "#d4e0c4";
+        } else {
+            resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов.<br>⚠️ Ошибка отправки в Telegram. Проверьте токен и chat_id.`;
+            resultDiv.style.background = "#f0d8b0";
+        }
+    });
+
     // Авторизация
     function authorizeUser(inputId) {
-        // Проверяем, есть ли пользователь в списке
-        if (usersList[inputId]) {
-            currentUser = { 
-                id: inputId, 
-                name: usersList[inputId], 
-                isAdmin: admins.hasOwnProperty(inputId) 
-            };
+        // Проверка ID в списке
+        if (userMap[inputId]) {
+            currentUser = { id: inputId, name: userMap[inputId] };
         } else {
-            alert("ID не найден. Доступ запрещён.");
+            alert("Неверный ID. Доступ запрещен.");
             return false;
         }
         
-        let greeting = currentUser.isAdmin 
+        document.getElementById('greetingText').innerHTML = currentUser.id === "000" 
             ? `<i class="fas fa-user-tie"></i> Здравствуйте, ${currentUser.name}`
             : `<i class="fas fa-graduation-cap"></i> Привет, ${currentUser.name}`;
         
-        document.getElementById('greetingText').innerHTML = greeting;
         document.body.classList.add('authorized');
-        
-        // Инициализация теста
-        userAnswers = new Array(questions.length).fill(null);
-        currentQuestionIndex = 0;
-        quizCompleted = false;
-        renderCurrentQuestion();
-        
         return true;
     }
-    
-    // Обработчики событий
+
     document.getElementById('authEnterBtn').addEventListener('click', () => {
         const id = document.getElementById('authIdInput').value.trim();
         if (id) authorizeUser(id);
@@ -576,9 +424,7 @@
         if (e.key === 'Enter') document.getElementById('authEnterBtn').click();
     });
     
-    document.getElementById('prevBtn').addEventListener('click', prevQuestion);
-    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
-    document.getElementById('submitQuiz').addEventListener('click', finishQuiz);
+    renderQuiz();
 </script>
 </body>
 </html>
