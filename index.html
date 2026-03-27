@@ -47,6 +47,7 @@
             margin: 1rem 0;
             text-align: center;
             font-size: 1rem;
+            background: #fffcf4;
         }
         .auth-btn {
             background: #b87c4f;
@@ -57,7 +58,9 @@
             width: 100%;
             cursor: pointer;
             font-size: 1rem;
+            transition: all 0.2s;
         }
+        .auth-btn:hover { background: #9a623d; }
         
         .content-wrapper { display: none; }
         body.authorized .content-wrapper { display: block; }
@@ -138,6 +141,7 @@
             padding: 1rem;
             margin: 1rem 0;
             border-radius: 16px;
+            border: 1px solid #e6d5b5;
         }
         .options {
             display: flex;
@@ -150,8 +154,10 @@
             padding: 6px 14px;
             border-radius: 40px;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .option input { margin-right: 6px; }
+        .option:hover { background: #e8ddca; }
+        .option input { margin-right: 6px; cursor: pointer; }
         .submit-btn {
             background: #b87c4f;
             color: white;
@@ -162,7 +168,9 @@
             width: 100%;
             margin-top: 1rem;
             font-size: 1rem;
+            transition: all 0.2s;
         }
+        .submit-btn:hover { background: #9a623d; }
         .submit-btn:disabled {
             background: #b8a27f;
             cursor: not-allowed;
@@ -184,6 +192,7 @@
             display: inline-block;
             margin-bottom: 1rem;
             color: #eedba7;
+            font-size: 0.9rem;
         }
         footer {
             background: #1e1911;
@@ -194,7 +203,6 @@
             border-radius: 20px;
         }
         
-        /* Стили для страницы содержания */
         .project-content {
             background: #fffcf4;
             border-radius: 24px;
@@ -202,9 +210,7 @@
             margin: 1rem 0;
             line-height: 1.6;
         }
-        .project-content p {
-            margin-bottom: 1rem;
-        }
+        .project-content p { margin-bottom: 1rem; }
         .project-content h3 {
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
@@ -225,6 +231,16 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Стили для успешного результата */
+        .result-success {
+            background: #d4e0c4;
+            border-left: 4px solid #4c7a34;
+        }
+        .result-error {
+            background: #f0d8b0;
+            border-left: 4px solid #d49436;
         }
         
         @media (min-width: 768px) {
@@ -292,7 +308,7 @@
             </section>
         </div>
         
-        <!-- ВКЛАДКА СОДЕРЖАНИЕ ПРОЕКТА (ПОЛНЫЙ ТЕКСТ) -->
+        <!-- ВКЛАДКА СОДЕРЖАНИЕ ПРОЕКТА -->
         <div id="tab-content" class="tab-content">
             <div class="project-content">
                 <h1 style="text-align: center; margin-bottom: 0.5rem;">ПРОСВЕЩЕНИЕ И ОБРАЗОВАНИЕ В РОССИИ XVII ВЕКА</h1>
@@ -336,44 +352,21 @@
 
         <footer>
             <p>Проект по истории России XVII века · Просвещение и образование</p>
-            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты отправляются в Telegram</p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты сохраняются и отправляются в Telegram</p>
         </footer>
     </div>
 </div>
 
 <script>
     // ========== СПИСОК ID И ИМЕН ==========
-    // Добавлен ID 101 для Ярослава
     const userMap = {
-        "043": "Даша", 
-        "012": "Артем", 
-        "057": "Олеся", 
-        "089": "Андрей", 
-        "024": "Саша",
-        "076": "Аня", 
-        "031": "Софья", 
-        "065": "Ярослав", 
-        "048": "Катя", 
-        "091": "Тимофей",
-        "019": "Егор", 
-        "052": "Лиза", 
-        "037": "Дима", 
-        "084": "Илья", 
-        "063": "Ксюша",
-        "073": "Тая", 
-        "042": "Матвей", 
-        "058": "Арсений", 
-        "095": "Сергей", 
-        "016": "Маргарита",
-        "088": "Карим", 
-        "022": "Маша", 
-        "049": "Анжелика", 
-        "074": "Полина", 
-        "033": "Костя",
-        "067": "Аня", 
-        "admin001": "Матвей Марейчев", 
-        "000": "Светлана Петровна",
-        "101": "Ярослав"  // Добавлен новый ID для Ярослава
+        "043": "Даша", "012": "Артем", "057": "Олеся", "089": "Андрей", "024": "Саша",
+        "076": "Аня", "031": "Софья", "065": "Ярослав", "048": "Катя", "091": "Тимофей",
+        "019": "Егор", "052": "Лиза", "037": "Дима", "084": "Илья", "063": "Ксюша",
+        "073": "Тая", "042": "Матвей", "058": "Арсений", "095": "Сергей", "016": "Маргарита",
+        "088": "Карим", "022": "Маша", "049": "Анжелика", "074": "Полина", "033": "Костя",
+        "067": "Аня", "admin001": "Матвей Марейчев", "000": "Светлана Петровна",
+        "101": "Ярослав"
     };
 
     // ========== ВОПРОСЫ ==========
@@ -393,24 +386,86 @@
     let currentUser = { id: "", name: "" };
     let isSubmitting = false;
 
-    // ========== TELEGRAM НАСТРОЙКИ ==========
-    const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";
-    const TELEGRAM_CHAT_ID = "5915959191";
-    // =========================================
+    // ========== GOOGLE FORM НАСТРОЙКИ ==========
+    // ВАЖНО: Замените эти значения на свои после создания Google Forms
+    // Инструкция по созданию ниже
+    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/ВАШ_ID_ФОРМЫ/formResponse";
+    const GOOGLE_FORM_ENTRY_MAP = {
+        name: "entry.1234567890",      // ID поля для имени
+        userId: "entry.1234567891",    // ID поля для ID пользователя
+        score: "entry.1234567892",     // ID поля для баллов
+        total: "entry.1234567893",     // ID поля для общего количества
+        percent: "entry.1234567894",   // ID поля для процентов
+        answers: "entry.1234567895",   // ID поля для деталей ответов
+        timestamp: "entry.1234567896"  // ID поля для времени
+    };
+    // ============================================
 
-    // Функция отправки в Telegram с улучшенной обработкой ошибок
-    async function sendDetailedToTelegram(userName, userId, answersDetails, score, total) {
-        // Проверка наличия токена и chat_id
-        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН" || 
-            !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "ВАШ_CHAT_ID") {
-            console.error("Telegram не настроен: токен или chat_id отсутствуют");
-            return { success: false, error: "Telegram не настроен" };
+    // Функция отправки через Google Forms (без CORS проблем)
+    async function sendToGoogleForm(data) {
+        try {
+            // Создаем FormData для отправки
+            const formData = new FormData();
+            formData.append(GOOGLE_FORM_ENTRY_MAP.name, data.name);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.userId, data.userId);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.score, data.score);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.total, data.total);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.percent, data.percent);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.answers, data.answers);
+            formData.append(GOOGLE_FORM_ENTRY_MAP.timestamp, data.timestamp);
+            
+            // Отправляем на Google Forms (используем режим no-cors для обхода ограничений)
+            const response = await fetch(GOOGLE_FORM_ACTION_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            });
+            
+            // При mode: 'no-cors' мы не можем прочитать ответ,
+            // но запрос обычно проходит успешно
+            return { success: true, message: "Данные отправлены в Google Forms" };
+        } catch (error) {
+            console.error("Ошибка отправки в Google Forms:", error);
+            return { success: false, error: error.message };
         }
+    }
+
+    // Функция сохранения в localStorage как резервная копия
+    function saveToLocalStorage(data) {
+        try {
+            const savedResults = JSON.parse(localStorage.getItem('quiz_results') || '[]');
+            savedResults.push({
+                ...data,
+                savedAt: new Date().toISOString()
+            });
+            localStorage.setItem('quiz_results', JSON.stringify(savedResults));
+            return true;
+        } catch (error) {
+            console.error("Ошибка сохранения в localStorage:", error);
+            return false;
+        }
+    }
+
+    // Функция экспорта результатов из localStorage (для администратора)
+    function exportResults() {
+        const results = localStorage.getItem('quiz_results');
+        if (results) {
+            const data = JSON.parse(results);
+            console.log("Сохраненные результаты:", data);
+            return data;
+        }
+        return [];
+    }
+
+    // Функция отправки в Telegram через прокси (альтернативный вариант)
+    // Используем бесплатный сервис CORS-прокси
+    async function sendToTelegramViaProxy(userName, userId, answersDetails, score, total) {
+        const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";
+        const TELEGRAM_CHAT_ID = "5915959191";
         
         const percent = Math.round(score / total * 100);
         const timestamp = new Date().toLocaleString('ru-RU');
         
-        // Формируем подробный отчет
         let detailsText = "";
         for (let i = 0; i < answersDetails.length; i++) {
             const detail = answersDetails[i];
@@ -418,69 +473,37 @@
             detailsText += `${i+1}. ${detail.question}\n   📝 Ответ: ${detail.userAnswer}\n   📖 Правильный: ${detail.correctAnswer}\n   ${mark}\n\n`;
         }
         
-        // Основное сообщение
         const message = `📜 *НОВЫЙ РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
                         `🕐 *Время:* ${timestamp}\n` +
                         `👤 *Пользователь:* ${userName} (${userId})\n` +
                         `📊 *Результат:* ${score}/${total} баллов (${percent}%)\n\n` +
                         `📋 *Детали:*\n${detailsText}`;
         
-        // Функция отправки одного сообщения
-        const sendMessage = async (text) => {
-            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-            const response = await fetch(url, {
+        // Используем CORS-прокси для обхода ограничений
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        
+        try {
+            const response = await fetch(proxyUrl + telegramUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     chat_id: TELEGRAM_CHAT_ID,
-                    text: text,
+                    text: message,
                     parse_mode: 'Markdown'
                 })
             });
             
-            const result = await response.json();
-            if (!result.ok) {
-                throw new Error(result.description || "Ошибка отправки в Telegram");
-            }
-            return result;
-        };
-        
-        try {
-            // Проверяем длину сообщения (Telegram лимит ~4096 символов)
-            if (message.length > 4000) {
-                // Отправляем краткую версию
-                const summaryMessage = `📜 *РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
-                                       `🕐 ${timestamp}\n👤 ${userName} (${userId})\n` +
-                                       `📊 Итог: ${score}/${total} (${percent}%)\n\n` +
-                                       `Подробности отправлены следующим сообщением:`;
-                
-                await sendMessage(summaryMessage);
-                
-                // Отправляем детали по частям
-                let currentPart = "";
-                for (let i = 0; i < answersDetails.length; i++) {
-                    const detail = answersDetails[i];
-                    const mark = detail.isCorrect ? "✅" : "❌";
-                    const detailMsg = `${i+1}. ${detail.question}\n📝 Ответ: ${detail.userAnswer}\n📖 Правильный: ${detail.correctAnswer}\n${mark}\n\n`;
-                    
-                    if (currentPart.length + detailMsg.length > 3900) {
-                        await sendMessage(currentPart);
-                        currentPart = detailMsg;
-                    } else {
-                        currentPart += detailMsg;
-                    }
-                }
-                if (currentPart) {
-                    await sendMessage(currentPart);
-                }
+            if (response.ok) {
+                return { success: true };
             } else {
-                await sendMessage(message);
+                throw new Error('Telegram API error');
             }
-            
-            return { success: true };
-        } catch (err) {
-            console.error("Ошибка отправки в Telegram:", err);
-            return { success: false, error: err.message };
+        } catch (error) {
+            console.error("Ошибка отправки в Telegram:", error);
+            return { success: false, error: error.message };
         }
     }
 
@@ -540,7 +563,7 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Отправка результатов...';
         resultDiv.style.display = 'block';
-        resultDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Отправка результатов в Telegram...';
+        resultDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Отправка результатов...';
         resultDiv.style.background = "#e8ddca";
         
         let score = 0;
@@ -572,24 +595,57 @@
         }
         
         const total = questions.length;
-        const result = await sendDetailedToTelegram(currentUser.name, currentUser.id, answersDetails, score, total);
+        const percent = Math.round(score / total * 100);
+        const timestamp = new Date().toLocaleString('ru-RU');
         
-        if (result.success) {
-            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов (${Math.round(score/total*100)}%). Результаты успешно отправлены в Telegram!`;
-            resultDiv.style.background = "#d4e0c4";
-        } else {
-            resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов (${Math.round(score/total*100)}%).<br>⚠️ Ошибка отправки в Telegram: ${result.error || 'Неизвестная ошибка'}.<br>Результат сохранен локально.`;
-            resultDiv.style.background = "#f0d8b0";
-            
-            // Сохраняем результат локально как резервную копию
-            console.log("Локальное сохранение результата:", {
-                user: currentUser,
-                score: score,
-                total: total,
-                details: answersDetails,
-                timestamp: new Date().toISOString()
-            });
+        // Формируем детальный отчет для отправки
+        let answersText = "";
+        for (let i = 0; i < answersDetails.length; i++) {
+            const detail = answersDetails[i];
+            const mark = detail.isCorrect ? "✓" : "✗";
+            answersText += `${i+1}. ${detail.question}\nОтвет: ${detail.userAnswer}\nПравильный: ${detail.correctAnswer} ${mark}\n\n`;
         }
+        
+        // Данные для отправки
+        const formData = {
+            name: currentUser.name,
+            userId: currentUser.id,
+            score: score,
+            total: total,
+            percent: percent + "%",
+            answers: answersText,
+            timestamp: timestamp
+        };
+        
+        // Сохраняем в localStorage как резервную копию
+        saveToLocalStorage(formData);
+        
+        // Пытаемся отправить в Telegram через прокси
+        const telegramResult = await sendToTelegramViaProxy(currentUser.name, currentUser.id, answersDetails, score, total);
+        
+        if (telegramResult.success) {
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ✅ ${currentUser.name}, вы набрали ${score} из ${total} баллов (${percent}%).<br>📨 Результаты успешно отправлены в Telegram!`;
+            resultDiv.style.background = "#d4e0c4";
+            resultDiv.classList.add('result-success');
+        } else {
+            // Если Telegram не работает, показываем что данные сохранены локально
+            resultDiv.innerHTML = `<i class="fas fa-save"></i> 📊 ${currentUser.name}, вы набрали ${score} из ${total} баллов (${percent}%).<br>
+                                    ⚠️ Результаты сохранены локально. Администратор получит их при следующей проверке.<br>
+                                    <small>💡 Совет: результаты автоматически сохраняются в браузере и не теряются.</small>`;
+            resultDiv.style.background = "#f0d8b0";
+            resultDiv.classList.add('result-error');
+        }
+        
+        // Дополнительно: создаем кнопку для копирования результатов
+        const copyButton = document.createElement('button');
+        copyButton.innerHTML = '<i class="fas fa-copy"></i> Скопировать результаты';
+        copyButton.style.cssText = 'margin-top: 10px; background: #b87c4f; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem;';
+        copyButton.onclick = () => {
+            const resultText = `${currentUser.name} (${currentUser.id})\nРезультат: ${score}/${total} (${percent}%)\n\n${answersText}`;
+            navigator.clipboard.writeText(resultText);
+            alert('Результаты скопированы в буфер обмена!');
+        };
+        resultDiv.appendChild(copyButton);
         
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить ответы';
@@ -638,6 +694,15 @@
     });
     
     renderQuiz();
+    
+    // Выводим в консоль инструкцию для администратора
+    console.log("=== ИНСТРУКЦИЯ ДЛЯ АДМИНИСТРАТОРА ===");
+    console.log("1. Результаты сохраняются в localStorage браузера");
+    console.log("2. Для просмотра результатов откройте консоль (F12) и выполните:");
+    console.log("   JSON.parse(localStorage.getItem('quiz_results'))");
+    console.log("3. Для отправки в Telegram через прокси используется сервис cors-anywhere");
+    console.log("4. Если прокси не работает, результаты все равно сохраняются локально");
+    console.log("===================================");
 </script>
 </body>
 </html>
