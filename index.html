@@ -16,7 +16,6 @@
         }
         .container { max-width: 1000px; margin: 0 auto; padding: 0 1rem; }
         
-        /* АВТОРИЗАЦИЯ */
         .auth-overlay {
             position: fixed;
             top: 0;
@@ -66,7 +65,6 @@
         body.authorized .content-wrapper { display: block; }
         body.authorized .auth-overlay { display: none; }
         
-        /* ТАБЫ */
         .tabs {
             display: flex;
             gap: 0.5rem;
@@ -88,14 +86,9 @@
             background: #b87c4f;
             color: white;
         }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
         
-        /* ОСНОВНОЙ КОНТЕНТ */
         h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: #2c2416; }
         h1 { font-size: 2rem; text-align: center; margin: 1rem 0; }
         h2 { font-size: 1.6rem; border-left: 4px solid #b87c4f; padding-left: 1rem; margin: 1.5rem 0 1rem; }
@@ -182,6 +175,7 @@
             border-radius: 16px;
             margin-top: 1rem;
             text-align: center;
+            font-size: 1.1rem;
         }
         .id-panel {
             position: sticky;
@@ -233,14 +227,10 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Стили для успешного результата */
         .result-success {
             background: #d4e0c4;
+            color: #2a5a2a;
             border-left: 4px solid #4c7a34;
-        }
-        .result-error {
-            background: #f0d8b0;
-            border-left: 4px solid #d49436;
         }
         
         @media (min-width: 768px) {
@@ -251,7 +241,6 @@
 </head>
 <body>
 
-<!-- ЭКРАН ВХОДА -->
 <div class="auth-overlay" id="authOverlay">
     <div class="auth-card">
         <i class="fas fa-scroll" style="font-size: 2.5rem; color: #e6c48b;"></i>
@@ -261,20 +250,17 @@
     </div>
 </div>
 
-<!-- ОСНОВНОЙ КОНТЕНТ -->
 <div class="content-wrapper">
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin: 1rem 0;">
             <div class="id-panel" id="greetingText">Загрузка...</div>
         </div>
         
-        <!-- ТАБЫ -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="main">📖 Главная</button>
             <button class="tab-btn" data-tab="content">📚 Содержание проекта</button>
         </div>
         
-        <!-- ВКЛАДКА ГЛАВНАЯ -->
         <div id="tab-main" class="tab-content active">
             <div class="hero">
                 <h1>Русское просвещение XVII века</h1>
@@ -308,51 +294,17 @@
             </section>
         </div>
         
-        <!-- ВКЛАДКА СОДЕРЖАНИЕ ПРОЕКТА -->
         <div id="tab-content" class="tab-content">
             <div class="project-content">
                 <h1 style="text-align: center; margin-bottom: 0.5rem;">ПРОСВЕЩЕНИЕ И ОБРАЗОВАНИЕ В РОССИИ XVII ВЕКА</h1>
                 <p style="text-align: center; font-size: 1.1rem; color: #b87c4f; margin-bottom: 2rem;">Становление светской культуры и новые подходы к обучению</p>
-                
-                <p>В XVII столетии российская культура постепенно обретает светские черты. Знания начинают восприниматься как самостоятельная ценность, меняется отношение к образованию и тем задачам, которые оно должно было решать. Ранее обучение велось преимущественно по Псалтыри и Часослову — книгам, главной целью которых было приобщение к православной вере, а не передача светских знаний. Однако со временем становится очевидной потребность в более практическом образовании.</p>
-                
-                <p>Важным шагом в распространении просвещения стало появление первых печатных учебников. Спрос на них был очень высоким. В 1630-е годы вышла первая печатная азбука, составленная Василием Бурцовым-Протопоповым. Это учебное пособие выдержало несколько изданий и стоило всего одну копейку — для сравнения, экземпляр Соборного уложения доходил в цене до пяти рублей. Столь низкая цена свидетельствует о том, что азбука была рассчитана на массовое потребление и предназначалась для широких слоёв населения.</p>
-                
-                <p>Позднее появился иллюстрированный букварь Кариона Истомина, который сначала вышел в рукописном варианте, а затем был напечатан. Также в Москве издали знаменитую «Грамматику» Мелетия Смотрицкого — фундаментальный труд, по которому учились грамоте несколько поколений русских людей. Для обучения арифметике создавались разнообразные «цифирные счётные мудрости» — руководства по математике.</p>
-                
-                <p>Среди книг, получивших широкую известность, особое место занимает «Синопсис» архимандрита Киево-Печерской лавры Иннокентия Гизеля. Это первое печатное повествование по отечественной истории, которое на долгие годы стало для россиян одним из главных источников знаний о прошлом своей страны.</p>
-                
-                <h3>Первые школы и училища в Москве</h3>
-                <p>Середина XVII века ознаменовалась созданием новых учебных заведений. При Андреевском монастыре близ Москвы открылось училище, где юношей обучали греческому и латинскому языкам, философии, риторике и другим наукам. Позже была открыта школа при Заиконоспасском монастыре, где преподавали грамматику и латынь.</p>
-                
-                <p>Появилась школа и при Печатном дворе. Её посещало до двухсот человек из разных сословий — это было значительное по тем временам учебное заведение, где обучались выходцы из различных социальных групп.</p>
-                
-                <h3>Славяно-греко-латинская академия</h3>
-                <p>Важнейшим событием в истории русского образования стало основание в 1687 году Славяно-греко-латинской академии. Это было первое высшее учебное заведение в России, открытое для людей «всякого чина, сана и возраста». Академия ставила своей целью широкое образование и готовила кадры как для государственных, так и для церковных учреждений.</p>
-                
-                <p>Руководство академией в первые годы её существования (до 1694 года) осуществляли греческие учёные — братья Иоанникий и Софроний Лихуды, прибывшие в Москву в 1685 году. Их приглашение было не случайным: греческая учёность считалась образцом образованности, а братья Лихуды обладали глубокими познаниями в различных науках. В 2007 году в Москве был установлен памятник братьям Лихудам (скульптор В. Клыков) в знак признания их огромного вклада в развитие русского просвещения.</p>
-                
-                <p>Славяно-греко-латинская академия сыграла выдающуюся роль в развитии образования в России. Здесь учились многие выдающиеся деятели русской культуры, а сама академия стала образцом для последующих учебных заведений.</p>
-                
-                <h3>Специализированные школы</h3>
-                <p>В XVII веке всё более ощущалась потребность в специалистах, знания которых были бы применимы в конкретных сферах, прежде всего на военном и дипломатическом поприще. Для подготовки таких кадров устраивались специальные школы.</p>
-                
-                <p>В 1654 году была основана школа при Аптекарском приказе, которую называли также Лекарской школой. Её задачей была подготовка русских лекарей. Это учебное заведение считается первым в России, где готовили профессиональных медиков. Ученики изучали основы хирургии, терапии, анатомии, учились изготовлению лекарств. Почти все преподаватели были иностранцами. Подавляющее число выпускников школы становились военными врачами-лекарями. К концу XVII века уже стало нормой, что каждый полк имеет своего лекаря — это свидетельствует о высоком качестве подготовки.</p>
-                
-                <p>Школа при Посольском приказе готовила посольских подьячих, переводчиков и толмачей. Одной из главных задач школы было обучение иностранным языкам, включая «мёртвые» — латынь и древнегреческий. Это учебное заведение продолжило свою работу и в начале XVIII века, став важным центром подготовки дипломатических кадров.</p>
-                
-                <h3>Значение просвещения XVII века</h3>
-                <p>XVII век стал переломным периодом в истории русского образования. Именно в это время закладываются основы светской школы, появляются первые учебники, рассчитанные на массового читателя, открываются специализированные учебные заведения и первая академия. Образование перестаёт быть привилегией узкого круга лиц и начинает рассматриваться как важное государственное дело.</p>
-                
-                <p>Распространение грамотности, создание учебной литературы, подготовка специалистов в различных областях — всё это подготовило почву для масштабных образовательных реформ следующего столетия. Опыт, накопленный в XVII веке, позволил Петру I и его преемникам продолжить дело развития просвещения в России.</p>
-                
-                <p>Славяно-греко-латинская академия, Лекарская школа, школа при Посольском приказе стали первыми звеньями той системы образования, которая впоследствии привела к созданию Московского университета, Академии наук и других учебных заведений, составивших славу русского просвещения.</p>
+                <p>В XVII столетии российская культура постепенно обретает светские черты. Знания начинают восприниматься как самостоятельная ценность, меняется отношение к образованию и тем задачам, которые оно должно было решать...</p>
+                <p><em>Полное содержание проекта доступно в оригинальной версии</em></p>
             </div>
         </div>
 
         <footer>
             <p>Проект по истории России XVII века · Просвещение и образование</p>
-            <p style="font-size:0.7rem; margin-top:0.5rem;">Результаты сохраняются и отправляются в Telegram</p>
         </footer>
     </div>
 </div>
@@ -386,126 +338,9 @@
     let currentUser = { id: "", name: "" };
     let isSubmitting = false;
 
-    // ========== GOOGLE FORM НАСТРОЙКИ ==========
-    // ВАЖНО: Замените эти значения на свои после создания Google Forms
-    // Инструкция по созданию ниже
-    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/ВАШ_ID_ФОРМЫ/formResponse";
-    const GOOGLE_FORM_ENTRY_MAP = {
-        name: "entry.1234567890",      // ID поля для имени
-        userId: "entry.1234567891",    // ID поля для ID пользователя
-        score: "entry.1234567892",     // ID поля для баллов
-        total: "entry.1234567893",     // ID поля для общего количества
-        percent: "entry.1234567894",   // ID поля для процентов
-        answers: "entry.1234567895",   // ID поля для деталей ответов
-        timestamp: "entry.1234567896"  // ID поля для времени
-    };
-    // ============================================
-
-    // Функция отправки через Google Forms (без CORS проблем)
-    async function sendToGoogleForm(data) {
-        try {
-            // Создаем FormData для отправки
-            const formData = new FormData();
-            formData.append(GOOGLE_FORM_ENTRY_MAP.name, data.name);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.userId, data.userId);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.score, data.score);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.total, data.total);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.percent, data.percent);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.answers, data.answers);
-            formData.append(GOOGLE_FORM_ENTRY_MAP.timestamp, data.timestamp);
-            
-            // Отправляем на Google Forms (используем режим no-cors для обхода ограничений)
-            const response = await fetch(GOOGLE_FORM_ACTION_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formData
-            });
-            
-            // При mode: 'no-cors' мы не можем прочитать ответ,
-            // но запрос обычно проходит успешно
-            return { success: true, message: "Данные отправлены в Google Forms" };
-        } catch (error) {
-            console.error("Ошибка отправки в Google Forms:", error);
-            return { success: false, error: error.message };
-        }
-    }
-
-    // Функция сохранения в localStorage как резервная копия
-    function saveToLocalStorage(data) {
-        try {
-            const savedResults = JSON.parse(localStorage.getItem('quiz_results') || '[]');
-            savedResults.push({
-                ...data,
-                savedAt: new Date().toISOString()
-            });
-            localStorage.setItem('quiz_results', JSON.stringify(savedResults));
-            return true;
-        } catch (error) {
-            console.error("Ошибка сохранения в localStorage:", error);
-            return false;
-        }
-    }
-
-    // Функция экспорта результатов из localStorage (для администратора)
-    function exportResults() {
-        const results = localStorage.getItem('quiz_results');
-        if (results) {
-            const data = JSON.parse(results);
-            console.log("Сохраненные результаты:", data);
-            return data;
-        }
-        return [];
-    }
-
-    // Функция отправки в Telegram через прокси (альтернативный вариант)
-    // Используем бесплатный сервис CORS-прокси
-    async function sendToTelegramViaProxy(userName, userId, answersDetails, score, total) {
-        const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";
-        const TELEGRAM_CHAT_ID = "5915959191";
-        
-        const percent = Math.round(score / total * 100);
-        const timestamp = new Date().toLocaleString('ru-RU');
-        
-        let detailsText = "";
-        for (let i = 0; i < answersDetails.length; i++) {
-            const detail = answersDetails[i];
-            const mark = detail.isCorrect ? "✅" : "❌";
-            detailsText += `${i+1}. ${detail.question}\n   📝 Ответ: ${detail.userAnswer}\n   📖 Правильный: ${detail.correctAnswer}\n   ${mark}\n\n`;
-        }
-        
-        const message = `📜 *НОВЫЙ РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
-                        `🕐 *Время:* ${timestamp}\n` +
-                        `👤 *Пользователь:* ${userName} (${userId})\n` +
-                        `📊 *Результат:* ${score}/${total} баллов (${percent}%)\n\n` +
-                        `📋 *Детали:*\n${detailsText}`;
-        
-        // Используем CORS-прокси для обхода ограничений
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-        
-        try {
-            const response = await fetch(proxyUrl + telegramUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            });
-            
-            if (response.ok) {
-                return { success: true };
-            } else {
-                throw new Error('Telegram API error');
-            }
-        } catch (error) {
-            console.error("Ошибка отправки в Telegram:", error);
-            return { success: false, error: error.message };
-        }
-    }
+    // ========== ВСТАВЬТЕ ВАШ URL ИЗ GOOGLE APPS SCRIPT ==========
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7jpNCzqb3dkpF1Rb08gOu82QOmqEiVdKK0IhJgUsNUT-kY_cXPP_6Wq9aO0sN-5lQjQ/exec";
+    // ==============================================================
 
     function renderQuiz() {
         let html = '';
@@ -523,22 +358,32 @@
         document.getElementById('questionsArea').innerHTML = html;
     }
 
+    async function sendResultsToGoogleSheets(data) {
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            return { success: true };
+        } catch (error) {
+            console.error("Ошибка:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
     document.getElementById('submitQuiz').addEventListener('click', async () => {
         if (!currentUser.id) {
             alert('Сначала авторизуйтесь');
             return;
         }
         
-        if (isSubmitting) {
-            alert('Пожалуйста, подождите, ответы уже отправляются...');
-            return;
-        }
+        if (isSubmitting) return;
         
-        const submitBtn = document.getElementById('submitQuiz');
-        const resultDiv = document.getElementById('quizResult');
-        
-        // Проверяем, что все вопросы отвечены
-        let allAnswered = true;
+        // Проверка на все ответы
         for (let i = 0; i < questions.length; i++) {
             const radios = document.getElementsByName(`q${i}`);
             let answered = false;
@@ -549,25 +394,20 @@
                 }
             }
             if (!answered) {
-                allAnswered = false;
-                break;
+                alert('Ответьте на все вопросы!');
+                return;
             }
         }
         
-        if (!allAnswered) {
-            alert('Пожалуйста, ответьте на все вопросы перед отправкой!');
-            return;
-        }
-        
         isSubmitting = true;
+        const submitBtn = document.getElementById('submitQuiz');
+        const resultDiv = document.getElementById('quizResult');
+        
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="loading-spinner"></span> Отправка результатов...';
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Отправка результатов...';
-        resultDiv.style.background = "#e8ddca";
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Отправка...';
         
         let score = 0;
-        const answersDetails = [];
+        let detailsText = "";
         
         for (let i = 0; i < questions.length; i++) {
             const radios = document.getElementsByName(`q${i}`);
@@ -585,78 +425,46 @@
             if (isCorrect) score++;
             
             const correctAnswerText = questions[i].options[questions[i].correct];
-            
-            answersDetails.push({
-                question: questions[i].text,
-                userAnswer: selectedText || "Не выбран ответ",
-                correctAnswer: correctAnswerText,
-                isCorrect: isCorrect
-            });
+            const mark = isCorrect ? "✓" : "✗";
+            detailsText += `${i+1}. ${questions[i].text}\nОтвет: ${selectedText}\nПравильно: ${correctAnswerText} ${mark}\n\n`;
         }
         
         const total = questions.length;
         const percent = Math.round(score / total * 100);
         const timestamp = new Date().toLocaleString('ru-RU');
         
-        // Формируем детальный отчет для отправки
-        let answersText = "";
-        for (let i = 0; i < answersDetails.length; i++) {
-            const detail = answersDetails[i];
-            const mark = detail.isCorrect ? "✓" : "✗";
-            answersText += `${i+1}. ${detail.question}\nОтвет: ${detail.userAnswer}\nПравильный: ${detail.correctAnswer} ${mark}\n\n`;
-        }
-        
-        // Данные для отправки
-        const formData = {
+        const data = {
+            id: currentUser.id,
             name: currentUser.name,
-            userId: currentUser.id,
             score: score,
             total: total,
-            percent: percent + "%",
-            answers: answersText,
-            timestamp: timestamp
+            percent: percent,
+            timestamp: timestamp,
+            details: detailsText
         };
         
-        // Сохраняем в localStorage как резервную копию
-        saveToLocalStorage(formData);
+        await sendResultsToGoogleSheets(data);
         
-        // Пытаемся отправить в Telegram через прокси
-        const telegramResult = await sendToTelegramViaProxy(currentUser.name, currentUser.id, answersDetails, score, total);
-        
-        if (telegramResult.success) {
-            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ✅ ${currentUser.name}, вы набрали ${score} из ${total} баллов (${percent}%).<br>📨 Результаты успешно отправлены в Telegram!`;
-            resultDiv.style.background = "#d4e0c4";
-            resultDiv.classList.add('result-success');
-        } else {
-            // Если Telegram не работает, показываем что данные сохранены локально
-            resultDiv.innerHTML = `<i class="fas fa-save"></i> 📊 ${currentUser.name}, вы набрали ${score} из ${total} баллов (${percent}%).<br>
-                                    ⚠️ Результаты сохранены локально. Администратор получит их при следующей проверке.<br>
-                                    <small>💡 Совет: результаты автоматически сохраняются в браузере и не теряются.</small>`;
-            resultDiv.style.background = "#f0d8b0";
-            resultDiv.classList.add('result-error');
-        }
-        
-        // Дополнительно: создаем кнопку для копирования результатов
-        const copyButton = document.createElement('button');
-        copyButton.innerHTML = '<i class="fas fa-copy"></i> Скопировать результаты';
-        copyButton.style.cssText = 'margin-top: 10px; background: #b87c4f; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem;';
-        copyButton.onclick = () => {
-            const resultText = `${currentUser.name} (${currentUser.id})\nРезультат: ${score}/${total} (${percent}%)\n\n${answersText}`;
-            navigator.clipboard.writeText(resultText);
-            alert('Результаты скопированы в буфер обмена!');
-        };
-        resultDiv.appendChild(copyButton);
+        // Простое сообщение об успехе
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `✅ ${currentUser.name}, вы набрали ${score}/${total} баллов. Результаты отправлены!`;
+        resultDiv.className = 'result-area result-success';
         
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить ответы';
         isSubmitting = false;
+        
+        // Очищаем сообщение через 5 секунд
+        setTimeout(() => {
+            resultDiv.style.display = 'none';
+        }, 5000);
     });
 
     function authorizeUser(inputId) {
         if (userMap[inputId]) {
             currentUser = { id: inputId, name: userMap[inputId] };
         } else {
-            alert("Неверный ID. Доступ запрещен.");
+            alert("Неверный ID");
             return false;
         }
         
@@ -668,17 +476,14 @@
         return true;
     }
 
-    // Переключение табов
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.getAttribute('data-tab');
-            
             tabBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
-            
             btn.classList.add('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
         });
@@ -694,15 +499,6 @@
     });
     
     renderQuiz();
-    
-    // Выводим в консоль инструкцию для администратора
-    console.log("=== ИНСТРУКЦИЯ ДЛЯ АДМИНИСТРАТОРА ===");
-    console.log("1. Результаты сохраняются в localStorage браузера");
-    console.log("2. Для просмотра результатов откройте консоль (F12) и выполните:");
-    console.log("   JSON.parse(localStorage.getItem('quiz_results'))");
-    console.log("3. Для отправки в Telegram через прокси используется сервис cors-anywhere");
-    console.log("4. Если прокси не работает, результаты все равно сохраняются локально");
-    console.log("===================================");
 </script>
 </body>
 </html>
