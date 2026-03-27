@@ -163,6 +163,11 @@
             margin-top: 1rem;
             font-size: 1rem;
         }
+        .submit-btn:disabled {
+            background: #b8a27f;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
         .result-area {
             background: #e8ddca;
             padding: 1rem;
@@ -204,6 +209,22 @@
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
             color: #b87c4f;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #b87c4f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         @media (min-width: 768px) {
@@ -322,13 +343,37 @@
 
 <script>
     // ========== СПИСОК ID И ИМЕН ==========
+    // Добавлен ID 101 для Ярослава
     const userMap = {
-        "043": "Даша", "012": "Артем", "057": "Олеся", "089": "Андрей", "024": "Саша",
-        "076": "Аня", "031": "Софья", "065": "Ярослав", "048": "Катя", "091": "Тимофей",
-        "019": "Егор", "052": "Лиза", "037": "Дима", "084": "Илья", "063": "Ксюша",
-        "073": "Тая", "042": "Матвей", "058": "Арсений", "095": "Сергей", "016": "Маргарита",
-        "088": "Карим", "022": "Маша", "049": "Анжелика", "074": "Полина", "033": "Костя",
-        "067": "Аня", "admin001": "Матвей Марейчев", "000": "Светлана Петровна"
+        "043": "Даша", 
+        "012": "Артем", 
+        "057": "Олеся", 
+        "089": "Андрей", 
+        "024": "Саша",
+        "076": "Аня", 
+        "031": "Софья", 
+        "065": "Ярослав", 
+        "048": "Катя", 
+        "091": "Тимофей",
+        "019": "Егор", 
+        "052": "Лиза", 
+        "037": "Дима", 
+        "084": "Илья", 
+        "063": "Ксюша",
+        "073": "Тая", 
+        "042": "Матвей", 
+        "058": "Арсений", 
+        "095": "Сергей", 
+        "016": "Маргарита",
+        "088": "Карим", 
+        "022": "Маша", 
+        "049": "Анжелика", 
+        "074": "Полина", 
+        "033": "Костя",
+        "067": "Аня", 
+        "admin001": "Матвей Марейчев", 
+        "000": "Светлана Петровна",
+        "101": "Ярослав"  // Добавлен новый ID для Ярослава
     };
 
     // ========== ВОПРОСЫ ==========
@@ -346,76 +391,96 @@
     ];
 
     let currentUser = { id: "", name: "" };
+    let isSubmitting = false;
 
     // ========== TELEGRAM НАСТРОЙКИ ==========
     const TELEGRAM_BOT_TOKEN = "8662933666:AAH6G90rTYGwXCG6rfPTfCEBgbssBF-dLMk";
     const TELEGRAM_CHAT_ID = "5915959191";
     // =========================================
 
-    // Функция отправки в Telegram
+    // Функция отправки в Telegram с улучшенной обработкой ошибок
     async function sendDetailedToTelegram(userName, userId, answersDetails, score, total) {
-        if (TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН" || TELEGRAM_CHAT_ID === "ВАШ_CHAT_ID") {
-            console.log("Telegram не настроен");
-            return false;
+        // Проверка наличия токена и chat_id
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН" || 
+            !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "ВАШ_CHAT_ID") {
+            console.error("Telegram не настроен: токен или chat_id отсутствуют");
+            return { success: false, error: "Telegram не настроен" };
         }
         
         const percent = Math.round(score / total * 100);
+        const timestamp = new Date().toLocaleString('ru-RU');
         
+        // Формируем подробный отчет
         let detailsText = "";
         for (let i = 0; i < answersDetails.length; i++) {
             const detail = answersDetails[i];
             const mark = detail.isCorrect ? "✅" : "❌";
-            detailsText += `${i+1}. ${detail.question}\n   📝 Ответил: ${detail.userAnswer}\n   📖 Правильный: ${detail.correctAnswer}\n   ${mark}\n\n`;
+            detailsText += `${i+1}. ${detail.question}\n   📝 Ответ: ${detail.userAnswer}\n   📖 Правильный: ${detail.correctAnswer}\n   ${mark}\n\n`;
         }
         
+        // Основное сообщение
         const message = `📜 *НОВЫЙ РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
+                        `🕐 *Время:* ${timestamp}\n` +
                         `👤 *Пользователь:* ${userName} (${userId})\n` +
-                        `📊 *Итог:* ${score}/${total} баллов (${percent}%)\n\n` +
-                        `📋 *Подробности:*\n${detailsText}`;
+                        `📊 *Результат:* ${score}/${total} баллов (${percent}%)\n\n` +
+                        `📋 *Детали:*\n${detailsText}`;
         
-        if (message.length > 4000) {
-            const summaryMessage = `📜 *РЕЗУЛЬТАТ ТЕСТА* 📜\n\n👤 ${userName} (${userId})\n📊 Итог: ${score}/${total} (${percent}%)\n\nПодробности слишком длинные, см. следующее сообщение.`;
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        // Функция отправки одного сообщения
+        const sendMessage = async (text) => {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: TELEGRAM_CHAT_ID,
-                    text: summaryMessage,
+                    text: text,
                     parse_mode: 'Markdown'
                 })
             });
-            for (let i = 0; i < answersDetails.length; i++) {
-                const detail = answersDetails[i];
-                const mark = detail.isCorrect ? "✅" : "❌";
-                const detailMsg = `${i+1}. ${detail.question}\n📝 Ответ: ${detail.userAnswer}\n📖 Правильный: ${detail.correctAnswer}\n${mark}`;
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: detailMsg,
-                        parse_mode: 'Markdown'
-                    })
-                });
+            
+            const result = await response.json();
+            if (!result.ok) {
+                throw new Error(result.description || "Ошибка отправки в Telegram");
             }
-            return true;
-        }
+            return result;
+        };
         
         try {
-            const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            });
-            const result = await response.json();
-            return result.ok;
+            // Проверяем длину сообщения (Telegram лимит ~4096 символов)
+            if (message.length > 4000) {
+                // Отправляем краткую версию
+                const summaryMessage = `📜 *РЕЗУЛЬТАТ ТЕСТА* 📜\n\n` +
+                                       `🕐 ${timestamp}\n👤 ${userName} (${userId})\n` +
+                                       `📊 Итог: ${score}/${total} (${percent}%)\n\n` +
+                                       `Подробности отправлены следующим сообщением:`;
+                
+                await sendMessage(summaryMessage);
+                
+                // Отправляем детали по частям
+                let currentPart = "";
+                for (let i = 0; i < answersDetails.length; i++) {
+                    const detail = answersDetails[i];
+                    const mark = detail.isCorrect ? "✅" : "❌";
+                    const detailMsg = `${i+1}. ${detail.question}\n📝 Ответ: ${detail.userAnswer}\n📖 Правильный: ${detail.correctAnswer}\n${mark}\n\n`;
+                    
+                    if (currentPart.length + detailMsg.length > 3900) {
+                        await sendMessage(currentPart);
+                        currentPart = detailMsg;
+                    } else {
+                        currentPart += detailMsg;
+                    }
+                }
+                if (currentPart) {
+                    await sendMessage(currentPart);
+                }
+            } else {
+                await sendMessage(message);
+            }
+            
+            return { success: true };
         } catch (err) {
-            console.error("Ошибка:", err);
-            return false;
+            console.error("Ошибка отправки в Telegram:", err);
+            return { success: false, error: err.message };
         }
     }
 
@@ -440,6 +505,43 @@
             alert('Сначала авторизуйтесь');
             return;
         }
+        
+        if (isSubmitting) {
+            alert('Пожалуйста, подождите, ответы уже отправляются...');
+            return;
+        }
+        
+        const submitBtn = document.getElementById('submitQuiz');
+        const resultDiv = document.getElementById('quizResult');
+        
+        // Проверяем, что все вопросы отвечены
+        let allAnswered = true;
+        for (let i = 0; i < questions.length; i++) {
+            const radios = document.getElementsByName(`q${i}`);
+            let answered = false;
+            for (let j = 0; j < radios.length; j++) {
+                if (radios[j].checked) {
+                    answered = true;
+                    break;
+                }
+            }
+            if (!answered) {
+                allAnswered = false;
+                break;
+            }
+        }
+        
+        if (!allAnswered) {
+            alert('Пожалуйста, ответьте на все вопросы перед отправкой!');
+            return;
+        }
+        
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Отправка результатов...';
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Отправка результатов в Telegram...';
+        resultDiv.style.background = "#e8ddca";
         
         let score = 0;
         const answersDetails = [];
@@ -470,18 +572,28 @@
         }
         
         const total = questions.length;
-        const sent = await sendDetailedToTelegram(currentUser.name, currentUser.id, answersDetails, score, total);
+        const result = await sendDetailedToTelegram(currentUser.name, currentUser.id, answersDetails, score, total);
         
-        const resultDiv = document.getElementById('quizResult');
-        resultDiv.style.display = 'block';
-        
-        if (sent) {
-            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, результаты отправлены в Telegram.`;
+        if (result.success) {
+            resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов (${Math.round(score/total*100)}%). Результаты успешно отправлены в Telegram!`;
             resultDiv.style.background = "#d4e0c4";
         } else {
-            resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов.<br>⚠️ Ошибка отправки в Telegram. Проверьте токен и chat_id.`;
+            resultDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${currentUser.name}, вы набрали ${score} из ${total} баллов (${Math.round(score/total*100)}%).<br>⚠️ Ошибка отправки в Telegram: ${result.error || 'Неизвестная ошибка'}.<br>Результат сохранен локально.`;
             resultDiv.style.background = "#f0d8b0";
+            
+            // Сохраняем результат локально как резервную копию
+            console.log("Локальное сохранение результата:", {
+                user: currentUser,
+                score: score,
+                total: total,
+                details: answersDetails,
+                timestamp: new Date().toISOString()
+            });
         }
+        
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить ответы';
+        isSubmitting = false;
     });
 
     function authorizeUser(inputId) {
