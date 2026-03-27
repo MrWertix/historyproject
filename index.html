@@ -384,7 +384,7 @@
         } else if (score >= 9 && score <= 10) {
             return 5;
         } else {
-            return 2; // на случай если 0 баллов
+            return 2;
         }
     }
 
@@ -502,7 +502,6 @@
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить ответы';
         isSubmitting = false;
         
-        // Очищаем сообщение через 5 секунд
         setTimeout(() => {
             resultDiv.style.display = 'none';
         }, 5000);
